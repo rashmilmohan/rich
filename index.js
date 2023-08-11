@@ -1,7 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
-
+const { Login } = require('./login.js')
 const app = express();
 
 app.use(bodyParser.json());
@@ -20,6 +20,11 @@ var db = mongoose.connection;
 
 db.on("error", () => console.log("Error in Connecting to Database"));
 db.once("open", () => console.log("Connected to Database"));
+app.get('/health',(req,res,next)=>{
+  console.log('object :>> ')
+  return next();
+
+})
 app.post("/register", (req, res) => {
   var name = req.body.name;
   var email = req.body.email;
@@ -38,6 +43,12 @@ app.post("/register", (req, res) => {
   return res.redirect("login.html");
   // hellllllllloooooooooooooooo
 });
+
+app.post("/login",Login)
+
+app.get('/login', (req, res)=> {
+  res.redirect()
+})
 
 app
   .get("/", (req, res) => {

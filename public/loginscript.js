@@ -6,7 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-
+console.log('email :>> ', email);
+console.log('password :>> ', password);
     // Send the username and password to the server for validation
     fetch("/login", {
       method: "POST",
