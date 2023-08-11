@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #204d91;
+      }
+      .main-container {
+        display: flex;
+        width: 80%;
+        background-color: white;
+        margin-left: 200px;
+        margin-right: 200px;
+        border-radius: 5px;
+      }
+      .left-part {
+        flex: 2;
+        padding: 20px;
+        background-color: white;
+        margin: 20px;
+        border-radius: 10px;
+      }
+      .right-part {
+        flex: 3;
+        padding: 20px;
+        background-color: #f2f2f2;
+        margin: 20px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .complete-payment-box {
+        flex: 1.5;
+        max-width: 450px; /* Adjust width */
+        padding: 20px;
+        background-color: white;
+        margin-right: 10px;
+        border-radius: 10px;
+      }
+      .complete-payment {
+        font-size: 25px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        align-self: flex-start;
+        margin-top: 15px;
+      }
+      .credit-card-details {
+        font-size: 14px;
+        margin-bottom: 20px;
+        color: grey;
+      }
+      .payment-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .confirm-button {
+        padding: 10px 20px;
+        background-color: #204d91;
+        color: white;
+        border: none;
+        cursor: pointer;
+        align-self: flex-start;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        border-radius: 3px;
+      }
+      .order-summary-box {
+        flex: 1;
+        max-width: 350px;
+        padding: 20px;
+        background-color: whitesmoke;
+        margin: 2px;
+      }
+      .order-summary-heading {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        margin-left: 15px;
+        margin-top: 15px;
+      }
+      .summary-details {
+        font-size: 14px;
+        margin-top: 15px;
+      }
+
+      .summary-details div {
+        margin-left: 15px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+
+        border-bottom: 1px solid gray;
+      }
+
+      .summary-details strong {
+        display: inline-block;
+        width: 100px;
+        font-weight: 550;
+        color: rgba(0, 0, 0, 0.8);
+      }
+
+      .summary-details .plan-price {
+        margin-top: 15px;
+      }
+
+      #card-element {
+        background-color: #f9f9f9;
+
+        border: 1px solid black;
+        border-radius: 5px;
+        padding-left: 5px;
+        padding-right: 29px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="complete-payment-box">
+        <div class="complete-payment">Complete Payment</div>
+        <div class="credit-card-details">
+          Enter your credit or debit card details below
+        </div>
+        <form class="payment-form" id="payment-form">
+          <div id="card-element"></div>
+          <button class="confirm-button" id="submit-button">
+            Confirm Payment
+          </button>
+        </form>
+      </div>
+      <div class="order-summary-box">
+        <div class="order-summary-heading">Order Summary</div>
+        <div class="summary-details">
+          <div><strong>Plan Name</strong> Example Plan</div>
+          <div><strong>Billing Cycle</strong> Monthly</div>
+          <div><strong>Plan Price</strong> $19.99</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const stripe = Stripe("YOUR_PUBLISHABLE_KEY");
+      const elements = stripe.elements();
+
+      const card = elements.create("card", {
+        style: {
+          base: {
+            iconColor: "#666EE8",
+            color: "#31325F",
+            lineHeight: "40px",
+            fontWeight: 300,
+            fontFamily: "Helvetica Neue",
+            fontSize: "15px",
+            border: "1px solid #ccc", // Add this line for the border
+
+            "::placeholder": {
+              color: "#CFD7E0",
+            },
+          },
+        },
+      });
+
+      card.mount("#card-element");
+
+      const form = document.getElementById("payment-form");
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const { token, error } = await stripe.createToken(card);
+
+        if (error) {
+          // Handle error
+        } else {
+          // Send token to your server and handle payment
+          // You can use token.id to charge the card using Stripe's API on your server
+        }
+      });
+    </script>
+  </body>
+</html>
